@@ -1,0 +1,18 @@
+CHIP HackCPU{
+  IN inst[16],inM[16],reset;
+  OUT PCout[15],Dataout[16],WriteM,AdressM[15];
+
+  PARTS:
+  And(a=inst[3],b=inst[15],out=WriteM);
+  Not(in=inst[15],out=notinst15);
+  Mux2to1bit16(x0=ALUout,x1=inst,s=notinst15,y=MUX1out);
+  And(a=inst[15],b=inst[5],out=t1);
+  Or(a=notinst15,b=t1,out=writeA);
+  ARegister(in=MUX1out,load=writeA,out=Aregout,out[0..14]=AdressM);
+  And(a=inst[15],b=inst[12],out=Mux2sel);
+  Mux2to1bit16(x0=Aregout,x1=inM,s=Mux2sel,y=MUX2out);
+  And(a=inst[15],b=inst[4],out=writeD);
+  DRegister(in=ALUout,load=writeD,out=Dregout);
+  HackALU(x=Dregout,y=MUX2out,zx=inst[11],nx=inst[10],zy=inst[9],ny=inst[8],f=inst[7],no=inst[6],out=ALUout,out=Dataout,zr=zr,ng=ng);
+  ProgramCounter(reset=reset,Aout=Aregout,i15=inst[15],i0=inst[0],i1=inst[1],i2=inst[2],zr=zr,ng=ng,PCout[0..14]=PCout);
+}

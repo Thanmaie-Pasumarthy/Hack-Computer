@@ -1,0 +1,38 @@
+/*Input x,y is both the numbers to be evaluated
+  aors is for choosing addition or subtraction 0 for addition and 1 for subtraction
+  uors is for choosing signed or unsigned 0 is for unsigned and 1 is for unsigned
+  s is the output sum
+  of is for overflow detection 0 for no overflow and 1 for overflown*/
+
+CHIP clabased{
+  IN x[16],y[16],aors,uors;
+  OUT s[16],of;
+
+  PARTS:
+  Xor(a=y[0],b=aors,out=y0);
+  Xor(a=y[1],b=aors,out=y1);
+  Xor(a=y[2],b=aors,out=y2);
+  Xor(a=y[3],b=aors,out=y3);
+  Xor(a=y[4],b=aors,out=y4);
+  Xor(a=y[5],b=aors,out=y5);
+  Xor(a=y[6],b=aors,out=y6);
+  Xor(a=y[7],b=aors,out=y7);
+  Xor(a=y[8],b=aors,out=y8);
+  Xor(a=y[9],b=aors,out=y9);
+  Xor(a=y[10],b=aors,out=y10);
+  Xor(a=y[11],b=aors,out=y11);
+  Xor(a=y[12],b=aors,out=y12);
+  Xor(a=y[13],b=aors,out=y13);
+  Xor(a=y[14],b=aors,out=y14);
+  Xor(a=y[15],b=aors,out=y15);
+  cla(x=x[0..3],y[0]=y0,y[1]=y1,y[2]=y2,y[3]=y3,carryin=aors,s=s[0..3],carryout=c4,prevcarry=c3);
+  cla(x=x[4..7],y[0]=y4,y[1]=y5,y[2]=y6,y[3]=y7,carryin=c4,s=s[4..7],carryout=c8,prevcarry=c7);
+  cla(x=x[8..11],y[0]=y8,y[1]=y9,y[2]=y10,y[3]=y11,carryin=c8,s=s[8..11],carryout=c12,prevcarry=c11);
+  cla(x=x[12..15],y[0]=y12,y[1]=y13,y[2]=y14,y[3]=y15,carryin=c12,s=s[12..15],carryout=carryout,prevcarry=prevcarry);
+  Not(in=uors,out=notuors);
+  Xor(a=aors,b=carryout,out=t1);
+  And(a=notuors,b=t1,out=term1);
+  Xor(a=carryout,b=prevcarry,out=t2);
+  And(a=uors,b=t2,out=term2);
+  Or(a=term1,b=term2,out=of);
+}

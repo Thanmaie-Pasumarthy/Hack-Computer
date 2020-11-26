@@ -1,0 +1,25 @@
+CHIP ProgramCounter{
+  IN reset,Aout[16],i15,i0,i1,i2,zr,ng;
+  OUT PCout[16];
+
+  PARTS:
+  Not(in=i2,out=ni2);
+  Not(in=i1,out=ni1);
+  Not(in=i0,out=ni0);
+  Not(in=zr,out=nzr);
+  Not(in=ng,out=nng);
+  And5(a=ni2,b=ni1,c=i0,d=nzr,e=nng,out=t1);
+  And4(a=ni2,b=i1,c=ni0,d=zr,out=t2);
+  And5(a=ni2,b=i1,c=i0,d=zr,e=nng,out=t3);
+  And5(a=i2,b=ni1,c=ni0,d=nzr,e=ng,out=t4);
+  And4(a=i2,b=ni1,c=i0,d=nzr,out=t5);
+  And5(a=i2,b=i1,c=ni0,d=zr,e=ng,out=t6);
+  And3(a=i2,b=i1,c=i0,out=t7);
+  Or4(a=t1,b=t2,c=t3,d=t4,out=temp1);
+  Or4(a=temp1,b=t5,c=t6,d=t7,out=term);
+  And(a=i15,b=term,out=j);
+  Mux4to1bit16(x0=AdderOut,x1=Aout,s0=j,s1=reset,y=PCin);
+  Not(in=j,out=notj);
+  PC(in=PCin,load=j,reset=reset,inc=notj,out=PCout,out=PCout1);
+  CLAusingH(x=PCout1,y[0]=true,isSigned=false,s=AdderOut,overflow=of);
+}

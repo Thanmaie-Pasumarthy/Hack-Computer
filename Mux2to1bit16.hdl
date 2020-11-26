@@ -1,0 +1,71 @@
+CHIP Mux2to1bit16 {
+    IN x0[16], x1[16], s;
+    OUT y[16];
+
+PARTS:
+    Not(in = s, out = nots);
+
+    And(a = nots, b = x0[0], out = w00);
+    And(a = s, b = x1[0], out = w01);
+    Or(a = w00, b = w01, out = y[0]);
+
+    And(a = nots, b = x0[1], out = w10);
+    And(a = s, b = x1[1], out = w11);
+    Or(a = w10, b = w11, out = y[1]);
+
+    And(a = nots, b = x0[2], out = w20);
+    And(a = s, b = x1[2], out = w21);
+    Or(a = w20, b = w21, out = y[2]);
+
+    And(a = nots, b = x0[3], out = w30);
+    And(a = s, b = x1[3], out = w31);
+    Or(a = w30, b = w31, out = y[3]);
+
+    And(a = nots, b = x0[4], out = w40);
+    And(a = s, b = x1[4], out = w41);
+    Or(a = w40, b = w41, out = y[4]);
+
+    And(a = nots, b = x0[5], out = w50);
+    And(a = s, b = x1[5], out = w51);
+    Or(a = w50, b = w51, out = y[5]);
+
+    And(a = nots, b = x0[6], out = w60);
+    And(a = s, b = x1[6], out = w61);
+    Or(a = w60, b = w61, out = y[6]);
+
+    And(a = nots, b = x0[7], out = w70);
+    And(a = s, b = x1[7], out = w71);
+    Or(a = w70, b = w71, out = y[7]);
+
+    And(a = nots, b = x0[8], out = w80);
+    And(a = s, b = x1[8], out = w81);
+    Or(a = w80, b = w81, out = y[8]);
+
+    And(a = nots, b = x0[9], out = w90);
+    And(a = s, b = x1[9], out = w91);
+    Or(a = w90, b = w91, out = y[9]);
+
+    And(a = nots, b = x0[10], out = w100);
+    And(a = s, b = x1[10], out = w101);
+    Or(a = w100, b = w101, out = y[10]);
+
+    And(a = nots, b = x0[11], out = w110);
+    And(a = s, b = x1[11], out = w111);
+    Or(a = w110, b = w111, out = y[11]);
+
+    And(a = nots, b = x0[12], out = w120);
+    And(a = s, b = x1[12], out = w121);
+    Or(a = w120, b = w121, out = y[12]);
+
+    And(a = nots, b = x0[13], out = w130);
+    And(a = s, b = x1[13], out = w131);
+    Or(a = w130, b = w131, out = y[13]);
+
+    And(a = nots, b = x0[14], out = w140);
+    And(a = s, b = x1[14], out = w141);
+    Or(a = w140, b = w141, out = y[14]);
+
+    And(a = nots, b = x0[15], out = w150);
+    And(a = s, b = x1[15], out = w151);
+    Or(a = w150, b = w151, out = y[15]);
+}

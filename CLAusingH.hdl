@@ -1,0 +1,163 @@
+CHIP CLAusingH{
+IN x[16],y[16],c0,isSigned;
+OUT s[16],overflow;
+
+ PARTS:
+ Xor(a=y[0],b=c0,out=y0);
+ Xor(a=y[1],b=c0,out=y1);
+ Xor(a=y[2],b=c0,out=y2);
+ Xor(a=y[3],b=c0,out=y3);
+ Xor(a=y[4],b=c0,out=y4);
+ Xor(a=y[5],b=c0,out=y5);
+ Xor(a=y[6],b=c0,out=y6);
+ Xor(a=y[7],b=c0,out=y7);
+ Xor(a=y[8],b=c0,out=y8);
+ Xor(a=y[9],b=c0,out=y9);
+ Xor(a=y[10],b=c0,out=y10);
+ Xor(a=y[11],b=c0,out=y11);
+ Xor(a=y[12],b=c0,out=y12);
+ Xor(a=y[13],b=c0,out=y13);
+ Xor(a=y[14],b=c0,out=y14);
+ Xor(a=y[15],b=c0,out=y15);
+
+ Xor(a=x[0],b=y0,out=p0);
+ And(a=x[0],b=y0,out=g0);
+ Xor(a=x[1],b=y1,out=p1);
+ And(a=x[1],b=y1,out=g1);
+ Xor(a=x[2],b=y2,out=p2);
+ And(a=x[2],b=y2,out=g2);
+ Xor(a=x[3],b=y3,out=p3);
+ And(a=x[3],b=y3,out=g3);
+ Xor(a=x[4],b=y4,out=p4);
+ And(a=x[4],b=y4,out=g4);
+ Xor(a=x[5],b=y5,out=p5);
+ And(a=x[5],b=y5,out=g5);
+ Xor(a=x[6],b=y6,out=p6);
+ And(a=x[6],b=y6,out=g6);
+ Xor(a=x[7],b=y7,out=p7);
+ And(a=x[7],b=y7,out=g7);
+ Xor(a=x[8],b=y8,out=p8);
+ And(a=x[8],b=y8,out=g8);
+ Xor(a=x[9],b=y9,out=p9);
+ And(a=x[9],b=y9,out=g9);
+ Xor(a=x[10],b=y10,out=p10);
+ And(a=x[10],b=y10,out=g10);
+ Xor(a=x[11],b=y11,out=p11);
+ And(a=x[11],b=y11,out=g11);
+ Xor(a=x[12],b=y12,out=p12);
+ And(a=x[12],b=y12,out=g12);
+ Xor(a=x[13],b=y13,out=p13);
+ And(a=x[13],b=y13,out=g13);
+ Xor(a=x[14],b=y14,out=p14);
+ And(a=x[14],b=y14,out=g14);
+ Xor(a=x[15],b=y15,out=p15);
+ And(a=x[15],b=y15,out=g15);
+
+ And5(a=p0, b=p1, c=p2, d=p3, e=true, out=pI0);
+ And5(a=p4, b=p5, c=p6, d=p7, e=true, out=pI1);
+ And5(a=p8, b=p9, c=p10, d=p11, e=true, out=pI2);
+ And5(a=p12, b=p13, c=p14, d=p15, e=true, out=pI3);
+
+ And5(a=g0, b=p1, c=p2, d=p3, e=true, out=gI01);
+ And5(a=g1, b=p2, c=p3, d=true, e=true, out=gI02);
+ And(a=g2, b=p3, out=gI03);
+ Or5(a=gI01, b=gI02, c=gI03, d=g3, e=false, out=gI0);
+
+ And5(a=g4, b=p5, c=p6, d=p7, e=true, out=gI11);
+ And5(a=g5, b=p6, c=p7, d=true, e=true, out=gI12);
+ And(a=g6, b=p7, out=gI13);
+ Or5(a=gI11, b=gI12, c=gI13, d=g7, e=false, out=gI1);
+
+ And5(a=g8, b=p9, c=p10, d=p11, e=true, out=gI21);
+ And5(a=g9, b=p10, c=p11, d=true, e=true, out=gI22);
+ And(a=g10, b=p11, out=gI23);
+ Or5(a=gI21, b=gI22, c=gI23, d=g11, e=false, out=gI2);
+
+ And5(a=g12, b=p13, c=p14, d=p15, e=true, out=gI31);
+ And5(a=g13, b=p14, c=p15, d=true, e=true, out=gI32);
+ And(a=g14, b=p15, out=gI33);
+ Or5(a=gI31, b=gI32, c=gI33, d=g15, e=false, out=gI3);
+
+ And(a=pI0, b=c0, out=c40);
+ Or(a=c40, b=gI0, out=c4);
+
+ And5(a=pI1, b=pI0, c=c0, d=true, e=true, out=c80);
+ And(a=pI1, b=gI0, out=c81);
+ Or5(a=c80, b=c81, c=gI1, d=false, e=false, out=c8);
+
+ And5(a=pI2, b=pI1, c=pI0, d=c0, e=true, out=c120);
+ And5(a=pI2, b=pI1, c=gI0, d=true, e=true, out=c121);
+ And(a=pI2, b=gI1, out=c122);
+ Or5(a=c120, b=c121, c=c122, d=gI2, e=false, out=c12);
+
+ And5(a=pI3, b=pI2, c=pI1, d=pI0, e=c0, out=c160);
+ And5(a=pI3, b=pI2, c=pI1, d=gI0, e=true, out=c161);
+ And5(a=pI3, b=pI2, c=gI1, d=true, e=true, out=c162);
+ And(a=pI3, b=gI2, out=c163);
+ Or5(a=c160, b=c161, c=c162, d=c163, e=gI3, out=c16);
+
+ And(a=p0,b=c0,out=d0);
+ Or(a=d0,b=g0,out=c1);
+ And(a=p4,b=c4,out=d4);
+ Or(a=d4,b=g4,out=c5);
+ And(a=p8,b=c8,out=d8);
+ Or(a=d8,b=g8,out=c9);
+ And(a=p12,b=c12,out=d12);
+ Or(a=d12,b=g12,out=c13);
+
+ And3(a=p0,b=p1,c=c0,out=d1);
+ And(a=p1,b=g0,out=d2);
+ Or3(a=d1,b=d2,c=g1,out=c2);
+ And3(a=p4,b=p5,c=c4,out=d5);
+ And(a=p5,b=g4,out=d6);
+ Or3(a=d5,b=d6,c=g5,out=c6);
+ And3(a=p8,b=p9,c=c8,out=d9);
+ And(a=p9,b=g8,out=d10);
+ Or3(a=d9,b=d10,c=g9,out=c10);
+ And3(a=p12,b=p13,c=c12,out=d13);
+ And(a=p13,b=g12,out=d14);
+ Or3(a=d13,b=d14,c=g13,out=c14);
+
+ And4(a=p2,b=p1,c=p0,d=c0,out=t1);
+ And3(a=p2,b=p1,c=g0,out=t2);
+ And(a=p2,b=g1,out=t3);
+ Or4(a=t1,b=t2,c=t3,d=g2,out=c3);
+ And4(a=p6,b=p5,c=p4,d=c4,out=t5);
+ And3(a=p6,b=p5,c=g4,out=t6);
+ And(a=p6,b=g5,out=t7);
+ Or4(a=t5,b=t6,c=t7,d=g6,out=c7);
+ And4(a=p10,b=p9,c=p8,d=c8,out=t9);
+ And3(a=p10,b=p9,c=g8,out=t10);
+ And(a=p10,b=g9,out=t11);
+ Or4(a=t9,b=t10,c=t11,d=g10,out=c11);
+ And4(a=p14,b=p13,c=p12,d=c12,out=t13);
+ And3(a=p14,b=p13,c=g12,out=t14);
+ And(a=p14,b=g13,out=t15);
+ Or4(a=t13,b=t14,c=t15,d=g14,out=c15);
+
+ Xor(a=p0,b=c0,out=s[0]);
+ Xor(a=p1,b=c1,out=s[1]);
+ Xor(a=p2,b=c2,out=s[2]);
+ Xor(a=p3,b=c3,out=s[3]);
+ Xor(a=p4,b=c4,out=s[4]);
+ Xor(a=p5,b=c5,out=s[5]);
+ Xor(a=p6,b=c6,out=s[6]);
+ Xor(a=p7,b=c7,out=s[7]);
+ Xor(a=p8,b=c8,out=s[8]);
+ Xor(a=p9,b=c9,out=s[9]);
+ Xor(a=p10,b=c10,out=s[10]);
+ Xor(a=p11,b=c11,out=s[11]);
+ Xor(a=p12,b=c12,out=s[12]);
+ Xor(a=p13,b=c13,out=s[13]);
+ Xor(a=p14,b=c14,out=s[14]);
+ Xor(a=p15,b=c15,out=s[15]);
+
+ Or(a=c0, b=isSigned, out=w1);
+ Not(in=w1, out=notw1);
+ And(a=notw1, b=c16, out=unsignedOverflow);
+
+ Xor(a=c16, b=c15, out=w2);
+ And(a=w2, b=isSigned, out=signedOverflow);
+
+ Or(a=unsignedOverflow, b=signedOverflow,  out=overflow);
+}

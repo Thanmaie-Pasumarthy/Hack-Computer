@@ -1,0 +1,10 @@
+CHIP HackComputer{
+
+IN reset;
+
+PARTS:
+HackCPU(inst=inst,inM=inM,reset=reset,WriteM=WriteM,AdressM=AdressM,AdressM[0..13]=Adress,Dataout=Data,PCout=PC);
+RAM16K(in=Data,load=WriteM,address=Adress,out=inM);
+ROM32K(address=PC,out=inst);
+
+}

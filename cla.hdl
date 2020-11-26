@@ -1,0 +1,35 @@
+CHIP cla{
+  IN x[4],y[4],carryin;
+  OUT s[4],carryout,prevcarry;
+
+  PARTS:
+  Xor(a=x[0],b=y[0],out=p0);
+  Xor(a=x[1],b=y[1],out=p1);
+  Xor(a=x[2],b=y[2],out=p2);
+  Xor(a=x[3],b=y[3],out=p3);
+  And(a=x[0],b=y[0],out=g0);
+  And(a=x[1],b=y[1],out=g1);
+  And(a=x[2],b=y[2],out=g2);
+  And(a=x[3],b=y[3],out=g3);
+  And(a=p0,b=carryin,out=w1);
+  Or(a=w1,b=g0,out=c1);
+  And(a=p1,b=w1,out=x1);
+  And(a=p1,b=g0,out=x2);
+  Or3(a=x1,b=x2,c=g1,out=c2);
+  And(a=p2,b=x1,out=y1);
+  And(a=p2,b=x2,out=y2);
+  And(a=p2,b=g1,out=y3);
+  Or4(a=y1,b=y2,c=y3,d=g2,out=c3);
+  And(a=p3,b=y1,out=z1);
+  And(a=p3,b=y2,out=z2);
+  And(a=p3,b=y3,out=z3);
+  And(a=p3,b=g2,out=z4);
+  Or4(a=z1,b=z2,c=z3,d=z4,out=z5);
+  Or(a=z5,b=g3,out=carryout);
+  Xor(a=p0,b=carryin,out=s[0]);
+  Xor(a=p1,b=c1,out=s[1]);
+  Xor(a=p2,b=c2,out=s[2]);
+  Xor(a=p3,b=c3,out=s[3]);
+  Not(in=c3,out=notc3);
+  Not(in=notc3,out=prevcarry);
+}

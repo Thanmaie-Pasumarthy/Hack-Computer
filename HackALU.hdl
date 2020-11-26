@@ -1,0 +1,50 @@
+/*
+input:
+two signed integers are given as input,depending on 6 1bit inputs 
+called control bits,we can give 18 different outputs
+output:
+ng=1->output is -ve
+ng=0->output is +ve or zero
+
+zr=0->output is not zero
+zr=1->output is zero
+*/
+
+
+CHIP HackALU{
+  IN x[16],y[16],zx,zy,nx,ny,f,no;
+  OUT out[16],zr,ng;
+
+  PARTS:
+
+//to compute p
+  Mux2to1bit16(x0=x,x1[0]=false,x1[1]=false,x1[2]=false,x1[3]=false,x1[4]=false,x1[5]=false,x1[6]=false,x1[7]=false,x1[8]=false,x1[9]=false,x1[10]=false,x1[11]=false,x1[12]=false,x1[13]=false,x1[14]=false,x1[15]=false,s=zx,y=l);
+  Xor16bit(a=l,b=nx,out=p);
+  
+//to compute q
+  Mux2to1bit16(x0=y,x1[0]=false,x1[1]=false,x1[2]=false,x1[3]=false,x1[4]=false,x1[5]=false,x1[6]=false,x1[7]=false,x1[8]=false,x1[9]=false,x1[10]=false,x1[11]=false,x1[12]=false,x1[13]=false,x1[14]=false,x1[15]=false,s=zy,y=m);
+  Xor16bit(a=m,b=ny,out=q);
+
+//to compute p+q
+  CLAusingH(x=p,y=q,c0=false,isSigned=true,s=pPlusq,overflow=of1);
+
+//to compute p&q
+  And16bit(a=p,b=q,out=pAndq);
+
+//based on control signal 'f' we choose p+q or p&q
+  Mux2to1bit16(x0=pAndq,x1=pPlusq,s=f,y=t);
+
+//based on control signal 'no' we choose t or t complement as output as (t xor 0)->t whereas (t xor 1)-> (t complement)
+  Xor16bit(a=t,b=no,out=out,out[0]=out0,out[1]=out1,out[2]=out2,out[3]=out3,out[4]=out4,out[5]=out5,out[6]=out6,out[7]=out7,out[8]=out8,out[9]=out9,out[10]=out10,out[11]=out11,out[12]=out12,out[13]=out13,out[14]=out14,out[15]=out15);
+
+// to compute zr, we check if any of output bits(except sign bit) is 1,even if one bit is 1,output is non-zero->zr=0 else zr->1
+  Or4(a=out0,b=out1,c=out2,d=out3,out=temp1);
+  Or4(a=out4,b=out5,c=out6,d=out7,out=temp2);
+  Or4(a=out8,b=out9,c=out10,d=out11,out=temp3);
+  Or3(a=out12,b=out13,c=out14,out=temp4);
+  Or4(a=temp1,b=temp2,c=temp3,d=temp4,out=notzr);
+  Not(in=notzr,out=zr);
+
+//based on sign bit,output is +ve(or zero),-ve is decided
+  Same(a=out15,b=ng);
+}
